@@ -1,0 +1,147 @@
+.footer_container {
+    margin-top: 30px;
+
+    position: static;
+    bottom: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    background-color: var(--text-color);
+}
+
+.footer_containerContent {
+    width: 1100px;
+    height: 250px;
+
+    padding: 20px 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer_containerContent_left {
+    gap: 30px;
+
+    display: flex;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.footer_containerContent_leftLinks {
+    width: 300px;
+
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer_containerContent_leftLinksLink {
+    font-size: 20px;
+    font-weight: 700;
+
+    color: var(--background-color);
+
+    transition: 300ms ease-in-out;
+}
+
+.footer_containerContent_leftLinksLink:hover {
+    color: var(--principal-color);
+}
+
+.footer_containerContent_leftSocial {
+    width: 300px;
+
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer_containerContent_leftSocialLink {
+    font-size: 40px;
+
+    color: var(--background-color);
+    fill: var(--background-color);
+    stroke: var(--background-color);
+
+    transition: 300ms ease-in-out;
+}
+
+.footer_containerContent_leftSocialLink:hover {
+    color: var(--principal-color);
+    fill: var(--principal-color);
+    stroke: var(--principal-color);
+}
+
+.footer_containerContent_leftLine {
+    width: 600px;
+    height: 2px;
+
+    background-color: var(--background-color);
+}
+
+.footer_containerContent_right {
+    gap: 30px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.footer_containerContent_rightLogo {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+
+    transition: 300ms ease-in-out;
+}
+
+.footer_containerContent_rightLogo:hover .footer_containerContent_rightLogo_textTop {
+    color: var(--principal-color);
+}
+
+.footer_containerContent_rightLogo_image {
+    width: 100px;
+    height: 100px;
+}
+
+.footer_containerContent_rightLogo_text {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer_containerContent_rightLogo_textTop {
+    font-size: 20px;
+    font-weight: 700;
+
+    color: var(--background-color);
+
+    transition: 300ms ease-in-out;
+}
+
+.footer_containerContent_rightLogo_textBottom {
+    font-size: 20px;
+    font-weight: 700;
+
+    color: var(--secondary-color);
+
+    transition: 300ms ease-in-out;
+}
+
+.footer_containerContent_rightText {
+    font-size: 20px;
+    font-weight: 700;
+
+    color: var(--background-color);
+
+    transition: 300ms ease-in-out;
+}
