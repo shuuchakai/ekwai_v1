@@ -1,12 +1,17 @@
 import { Router } from 'express';
 
+import { createAdmin, forgotPassword, resetPassword, updatePassword, verifyEmail } from '../controllers/admin.controller';
+
 import { checkAdminExists } from '../middlewares/administradorExiste.middleware';
-import { createAdmin, getAdmin } from '../controllers/admin.controller';
 
 const router = Router();
 
-router.post('/admin', checkAdminExists, createAdmin);
+router.get('/verify-email/:token', verifyEmail);
 
-router.get('/admin/:id', getAdmin);
+router.post('/admin', checkAdminExists, createAdmin);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
+
+router.put('/update-password', updatePassword);
 
 export default router;

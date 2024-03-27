@@ -20,6 +20,9 @@ dependencies:
   cors:
     specifier: ^2.8.5
     version: 2.8.5
+  dotenv:
+    specifier: ^16.4.5
+    version: 16.4.5
   express:
     specifier: 5.0.0-beta.2
     version: 5.0.0-beta.2
@@ -29,6 +32,9 @@ dependencies:
   mysql2:
     specifier: ^3.9.2
     version: 3.9.2
+  nodemailer:
+    specifier: ^6.9.13
+    version: 6.9.13
   sequelize:
     specifier: ^6.37.1
     version: 6.37.1(mysql2@3.9.2)
@@ -664,6 +670,11 @@ packages:
     engines: {node: '>=0.3.1'}
     dev: true
 
+  /dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+    engines: {node: '>=12'}
+    dev: false
+
   /dottie@2.0.6:
     resolution: {integrity: sha512-iGCHkfUc5kFekGiqhe8B/mdaurD+lakO9txNnTvKtA6PISrw86LgqHvRzWYPyoE2Ph5aMIrCw9/uko6XHTKCwA==}
     dev: false
@@ -1290,6 +1301,11 @@ packages:
 
   /next-tick@1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
+    dev: false
+
+  /nodemailer@6.9.13:
+    resolution: {integrity: sha512-7o38Yogx6krdoBf3jCAqnIN4oSQFx+fMa0I7dK1D+me9kBxx12D+/33wSb+fhOCtIxvYJ+4x4IMEhmhCKfAiOA==}
+    engines: {node: '>=6.0.0'}
     dev: false
 
   /nopt@7.2.0:

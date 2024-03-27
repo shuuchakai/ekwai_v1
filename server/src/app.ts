@@ -1,9 +1,11 @@
 import cors from "cors";
+import dotenv from "dotenv";
 import helmet from "helmet";
 import express from "express";
 import bodyParser from "body-parser";
 import compression from "compression";
-import cookieParser from "cookie-parser";
+
+dotenv.config();
 
 import { syncTables } from "./db";
 
@@ -34,7 +36,6 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cookieParser());
 
 app.use('/api', adminRoutes);
 

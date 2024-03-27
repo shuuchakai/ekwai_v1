@@ -8,6 +8,7 @@ interface UsuarioAttributes {
     puesto: string;
     resetPasswordToken?: string;
     resetPasswordExpires?: Date;
+    emailVerificationToken?: string;
 }
 
 interface UsuarioInstance extends Model<UsuarioAttributes>, UsuarioAttributes { }
@@ -40,6 +41,10 @@ const UsuarioModel = sequelize.define<UsuarioInstance>('Usuario', {
     resetPasswordExpires: {
         type: DataTypes.DATE,
         allowNull: true,
+    },
+    emailVerificationToken: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 }, {
     sequelize,
