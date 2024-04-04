@@ -20,7 +20,7 @@ function Header() {
                         <Link to="/about" className="header_containerContent_rightLinksLink">Nosotros</Link>
                         <Link to="/contact" className="header_containerContent_rightLinksLink">Contacto</Link>
                     </nav>
-                    <Link className="header_containerContent_rightButton">Iniciar Sesión</Link>
+                    <Link to="/login" className="header_containerContent_rightButton">Iniciar Sesión</Link>
                 </div>
             </nav>
         </header>

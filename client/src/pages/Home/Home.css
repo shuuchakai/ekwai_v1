@@ -68,6 +68,13 @@
     color: var(--secondary-color);
 }
 
+.home_container_firstSectionContainer_right img {
+    margin-right: -800px;
+
+    width: 700px;
+    height: 100%;
+}
+
 .home_container_secondSectionContainer {
     width: 1100px;
 

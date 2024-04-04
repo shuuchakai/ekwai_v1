@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
 
+import Enfermeros from '../../assets/images/Inicio_enfermeras.svg';
+
 import './Home.css';
 
 function Home() {
@@ -23,7 +25,9 @@ function Home() {
                             </div>
                         </div>
                     </div>
-                    <div className="home_container_firstSectionContainer_right"></div>
+                    <div className="home_container_firstSectionContainer_right">
+                        <img src={Enfermeros} alt="Enfermeros" />
+                    </div>
                 </section>
                 <section className="home_container_secondSectionContainer">
                     <div className="home_container_secondSectionContainer_cardsContainer">
