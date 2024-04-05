@@ -99,6 +99,13 @@
     background-color: var(--secondary-color);
 }
 
+.login_cardBottom {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
 .login_cardBottom_text {
     font-size: 16px;
     font-weight: 400;

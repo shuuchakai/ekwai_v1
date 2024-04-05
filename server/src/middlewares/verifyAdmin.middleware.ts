@@ -5,7 +5,7 @@ import UsuarioModel from '../models/usuario.model';
 export const validateAdmin = async (req: Request, res: Response, next: NextFunction) => {
     const id_usuario = req.body.id_usuario;
 
-    if (!id_usuario.startsWith('adm1-')) {
+    if (!id_usuario || !id_usuario.startsWith('adm1-')) {
         return res.status(403).json({ message: 'Acceso denegado' });
     }
 

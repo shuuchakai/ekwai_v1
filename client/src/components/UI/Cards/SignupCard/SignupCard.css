@@ -1,0 +1,28 @@
+.signup_card {
+    width: 600px;
+    height: 600px;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.signup_cardMiddle_form_checkboxContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.signup_cardMiddle_form_checkboxContainer_checkbox {
+    width: 20px;
+    height: 20px;
+
+    cursor: pointer;
+}
+
+.signup_cardMiddle_form_checkboxContainer_label {
+    font-size: 16px;
+    font-weight: 400;
+}

@@ -3,12 +3,14 @@ import sequelize from '../db';
 
 interface UsuarioAttributes {
     id_usuario: string;
+    nombre: string;
     correo_electronico: string;
     contrasena: string;
     puesto: string;
-    resetPasswordToken?: string;
+    resetPasswordCode?: string;
     resetPasswordExpires?: Date;
-    emailVerificationToken?: string;
+    verificationCode?: string;
+    emailVerificated: boolean;
 }
 
 interface UsuarioInstance extends Model<UsuarioAttributes>, UsuarioAttributes { }
@@ -19,12 +21,13 @@ const UsuarioModel = sequelize.define<UsuarioInstance>('Usuario', {
         primaryKey: true,
         allowNull: false
     },
+    nombre: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     correo_electronico: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            isEmail: true
-        }
+        allowNull: false
     },
     contrasena: {
         type: DataTypes.TEXT,
@@ -34,7 +37,7 @@ const UsuarioModel = sequelize.define<UsuarioInstance>('Usuario', {
         type: DataTypes.ENUM('enfermero', 'cuidador', 'paciente', 'administrador'),
         allowNull: false
     },
-    resetPasswordToken: {
+    resetPasswordCode: {
         type: DataTypes.STRING,
         allowNull: true
     },
@@ -42,9 +45,14 @@ const UsuarioModel = sequelize.define<UsuarioInstance>('Usuario', {
         type: DataTypes.DATE,
         allowNull: true,
     },
-    emailVerificationToken: {
+    verificationCode: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    emailVerificated: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 }, {
     sequelize,

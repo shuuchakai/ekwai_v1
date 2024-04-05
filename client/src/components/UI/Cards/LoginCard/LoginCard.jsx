@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'sonner';
 import { useState } from 'react';
 import * as yup from 'yup';
@@ -11,6 +11,8 @@ function LoginCard() {
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+
+    const navigate = useNavigate();
 
     const schema = yup.object().shape({
         email: yup.string().email().matches(/@(gmail|outlook)\.com$/, "El correo electrónico debe ser de gmail o outlook"),
@@ -55,9 +57,9 @@ function LoginCard() {
         if (hasErrors) return;
 
         try {
-            const response = await axios.post('https://tu-backend.com/api/login', {
-                email,
-                password
+            const response = await axios.post('http://localhost:5000/api/login', {
+                correo_electronico: email,
+                contrasena: password
             });
 
             localStorage.setItem('user', JSON.stringify(response.data));
@@ -75,11 +77,16 @@ function LoginCard() {
                     position: 'top-right'
                 }
             );
+
+            setTimeout(()=> {
+                navigate("/dashboard")
+            }, 2000)
+
         } catch (error) {
             toast(
                 <div className="loginToast">
                     <p className="loginToast_title">Error al iniciar sesión</p>
-                    <p className="loginToast_subtitle">Tus datos son erróneos y no coinciden.</p>
+                    <p className="loginToast_subtitle">El inicio de sesión no pudo ser completado exitosamente.</p>
                 </div>,
                 {
                     style: {
@@ -90,6 +97,7 @@ function LoginCard() {
                     position: 'top-right'
                 }
             );
+            console.log(error);
         }
     };
 

@@ -1,16 +1,17 @@
 import { Router } from 'express';
 
-import { createAdmin, forgotPassword, resetPassword, updatePassword, verifyEmail } from '../controllers/admin.controller';
+import { createAdmin, forgotPassword, resetPassword, updatePassword, verifyEmail, login } from '../controllers/admin.controller';
 
-import { checkAdminExists } from '../middlewares/administradorExiste.middleware';
+import { checkAdminExists } from '../middlewares/adminExists.middleware';
 
 const router = Router();
 
-router.get('/verify-email/:token', verifyEmail);
+router.post('/verify-email', verifyEmail);
 
 router.post('/admin', checkAdminExists, createAdmin);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
+router.post('/login', login);
 
 router.put('/update-password', updatePassword);
 
