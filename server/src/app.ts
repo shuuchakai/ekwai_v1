@@ -10,7 +10,12 @@ dotenv.config();
 
 import { syncTables } from "./db";
 
+import './models/solucitud.model';
+import './models/telefonos.model';
+import './models/association'
+
 import adminRoutes from './routes/admin.router';
+import applicationRoutes from './routes/solicitud.router';
 
 const app = express();
 
@@ -40,6 +45,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api', adminRoutes);
+app.use('/api', applicationRoutes);
 
 syncTables();
 
