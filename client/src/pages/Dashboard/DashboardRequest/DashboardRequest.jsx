@@ -117,7 +117,21 @@ const validationSchema = Yup.object().shape({
 function DashboardRequest() {
     const [error, setError] = useState({});
     const [phoneNumbers, setPhoneNumbers] = useState(['']);
-    const [availability, setAvailability] = useState({
+    const [step, setStep] = useState(1);
+    const [formValues, setFormValues] = useState({
+        nombre: '',
+        apellidoPaterno: '',
+        apellidoMaterno: '',
+        genero: '',
+        tipoUsuario: '',
+        correoElectronico: '',
+        rfc: '',
+        direccion: '',
+        fechaNacimiento: '',
+        sueldo: '',
+        phoneNumbers: phoneNumbers,
+    });
+    /*const [availability, setAvailability] = useState({
         lunes: { trabaja: false, inicio: '', fin: '' },
         martes: { trabaja: false, inicio: '', fin: '' },
         miercoles: { trabaja: false, inicio: '', fin: '' },
@@ -126,16 +140,23 @@ function DashboardRequest() {
         sabado: { trabaja: false, inicio: '', fin: '' },
         domingo: { trabaja: false, inicio: '', fin: '' },
     });
+    */
 
-    const handleAvailabilityChange = (day, field, value) => {
-        setAvailability({
-            ...availability,
-            [day]: {
-                ...availability[day],
-                [field]: value,
-            },
-        });
-    };
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    if (!user) {
+        window.location.href = '/login';
+    }
+
+    // const handleAvailabilityChange = (day, field, value) => {
+    //     setAvailability({
+    //         ...availability,
+    //         [day]: {
+    //             ...availability[day],
+    //             [field]: value,
+    //         },
+    //     });
+    // };
 
     const handlePhoneNumberChange = (index, event) => {
         const newPhoneNumbers = [...phoneNumbers];
@@ -153,22 +174,10 @@ function DashboardRequest() {
         event.preventDefault();
 
         try {
-            await validationSchema.validate({
-                nombre: '',
-                apellidoPaterno: '',
-                apellidoMaterno: '',
-                genero: '',
-                tipoUsuario: '',
-                correoElectronico: '',
-                rfc: '',
-                direccion: '',
-                fechaNacimiento: '',
-                sueldo: '',
-                phoneNumbers: phoneNumbers,
-                availability: availability,
-            }, { abortEarly: false });
+            await validationSchema.validate(formValues, { abortEarly: false });
 
             setError({});
+            setStep(step + 1); // Incrementa el paso
         } catch (err) {
             if (err instanceof Yup.ValidationError) {
                 const errorMessages = {};
@@ -181,46 +190,71 @@ function DashboardRequest() {
             };
         };
     };
-
     return (
         <>
             <Sidebar />
-            <div className="request">
-                <div className="request_top">
-                    <img className="request_topLogo" src={Logo} alt="logo" />
-                    <p className="request_topTitle">Registro</p>
-                </div>
-                <form className="request_middle" onSubmit={handleSumbit}>
-                    <div className="request_middleLeft">
-                        <div className="request_middleLeft_inputContainer">
-                            <label className="request_middleLeft_label">Nombre</label>
-                            <input className="request_middleLeft_input" type="text" />
-                            {error.nombre && <p className="request_middleLeft_error">{error.nombre}</p>}
-                        </div>
-                        <div className="request_middleLeft_inputContainer">
-                            <label className="request_middleLeft_label">Apellido Materno</label>
-                            <input className="request_middleLeft_input" type="text" />
-                            {error.apellidoMaterno && <p className="request_middleLeft_error">{error.apellidoMaterno}</p>}
-                        </div>
-                        <div className="request_middleLeft_inputContainer">
-                            <label className="request_middleLeft_label">Tipo de usuario</label>
-                            <select className="request_middleLeft_input">
-                                <option className="request_middleLeft_option" value="cuidador">Cuidador</option>
-                                <option className="request_middleLeft_option" value="enfermero">Enfermero</option>
-                            </select>
-                            {error.tipoUsuario && <p className="request_middleLeft_error">{error.tipoUsuario}</p>}
-                        </div>
-                        <div className="request_middleLeft_inputContainer">
-                            <label className="request_middleLeft_label">Correo Electrónico</label>
-                            <input className="request_middleLeft_input" type="email" />
-                            {error.correoElectronico && <p className="request_middleLeft_error">{error.correoElectronico}</p>}
-                        </div>
-                        <div className="request_middleLeft_inputContainer">
-                            <label className="request_middleLeft_label">RFC</label>
-                            <input className="request_middleLeft_input" type="text" />
-                            {error.rfc && <p className="request_middleLeft_error">{error.rfc}</p>}
-                        </div>
-                        <div className="request_middleRight_inputContainer">
+            <div className="request_container">
+                <div className="request">
+                    <div className="request_top">
+                        <img className="request_topLogo" src={Logo} alt="logo" />
+                        <p className="request_topTitle">Registro</p>
+                    </div>
+                    {step === 1 && (
+                        <form className="request_middle" onSubmit={handleSumbit}>
+                            <div className="request_middleContainer">
+                                <div className="request_middleLeft">
+                                    <div className="request_middleLeft_inputContainer">
+                                        <label className="request_middleLeft_label">Nombre</label>
+                                        <input
+                                            className="request_middleLeft_input"
+                                            type="text"
+                                            value={formValues.nombre}
+                                            onChange={((event) => setFormValues({ ...formValues, nombre: event.target.value }))}
+                                        />
+                                        {error.nombre && <p className="request_middleLeft_error">{error.nombre}</p>}
+                                    </div>
+                                    <div className="request_middleLeft_inputContainer">
+                                        <label className="request_middleLeft_label">Apellido Materno</label>
+                                        <input
+                                            className="request_middleLeft_input"
+                                            type="text"
+                                            value={formValues.apellidoMaterno}
+                                            onChange={(event) => setFormValues({ ...formValues, apellidoMaterno: event.target.value })}
+                                        />
+                                        {error.apellidoMaterno && <p className="request_middleLeft_error">{error.apellidoMaterno}</p>}
+                                    </div>
+                                    <div className="request_middleLeft_inputContainer">
+                                        <label className="request_middleLeft_label">Tipo de usuario</label>
+                                        <select
+                                            className="request_middleLeft_input"
+                                            value={formValues.tipoUsuario}
+                                            onChange={(event) => setFormValues({ ...formValues, tipoUsuario: event.target.value })}
+                                        >
+                                            <option className="request_middleLeft_option" value="cuidador">Cuidador</option>
+                                            <option className="request_middleLeft_option" value="enfermero">Enfermero</option>
+                                        </select>
+                                        {error.tipoUsuario && <p className="request_middleLeft_error">{error.tipoUsuario}</p>}
+                                    </div>
+                                    <div className="request_middleLeft_inputContainer">
+                                        <label className="request_middleLeft_label">Correo Electrónico</label>
+                                        <input
+                                            className="request_middleLeft_input"
+                                            type="email"
+                                            value={formValues.correoElectronico}
+                                        />
+                                        {error.correoElectronico && <p className="request_middleLeft_error">{error.correoElectronico}</p>}
+                                    </div>
+                                    <div className="request_middleLeft_inputContainer">
+                                        <label className="request_middleLeft_label">RFC</label>
+                                        <input
+                                            className="request_middleLeft_input"
+                                            type="text"
+                                            value={formValues.rfc}
+                                        />
+                                        {error.rfc && <p className="request_middleLeft_error">{error.rfc}</p>}
+                                    </div>
+                                    {/* Parte de la disponibilidad, agregar cuando ya se tenga la función en el backend. FUNCIÓN EXTRA */}
+                                    {/* <div className="request_middleRight_inputContainer">
                             <label className="request_middleRight_label">Disponibilidad</label>
                             {Object.keys(availability).map((day) => (
                                 <div key={day}>
@@ -249,57 +283,166 @@ function DashboardRequest() {
                                     )}
                                 </div>
                             ))}
-                        </div>
-                    </div>
-                    <div className="request_middleRight">
-                        <div className="request_middleRight_inputContainer">
-                            <label className="request_middleRight_label">Apellido Paterno</label>
-                            <input className="request_middleRight_input" type="text" />
-                            {error.apellidoPaterno && <p className="request_middleRight_error">{error.apellidoPaterno}</p>}
-                        </div>
-                        <div className="request_middleRight_inputContainer">
-                            <label className="request_middleRight_label">Género</label>
-                            <select className="request_middleRight_input">
-                                <option className="request_middleRight_option" value="masculino">Masculino</option>
-                                <option className="request_middleRight_option" value="femenino">Femenino</option>
-                            </select>
-                            {error.genero && <p className="request_middleRight_error">{error.genero}</p>}
-                        </div>
-                        <div className="request_middleRight_inputContainer">
-                            <label className="request_middleRight_label">Dirección</label>
-                            <input className="request_middleRight_input" type="text" />
-                            {error.direccion && <p className="request_middleRight_error">{error.direccion}</p>}
-                        </div>
-                        <div className="request_middleRight_inputContainer">
-                            <label className="request_middleRight_label">Fecha de Nacimiento</label>
-                            <input className="request_middleRight_input" type="date" />
-                            {error.fechaNacimiento && <p className="request_middleRight_error">{error.fechaNacimiento}</p>}
-                        </div>
-                        <div className="request_middleRight_inputContainer">
-                            <label className="request_middleRight_label">Números Teléfonicos</label>
-                            {phoneNumbers.map((phoneNumber, index) => (
-                                <div key={index} className="request_middleRight_labelPhones">
-                                    <input
-                                        className="request_middleRight_input"
-                                        type="number"
-                                        value={phoneNumber}
-                                        onChange={(event) => handlePhoneNumberChange(index, event)}
-                                    />
-                                    {error.phoneNumbers && <p className="request_middleRight_error">{error.phoneNumbers}</p>}
+                        </div> */}
                                 </div>
-                            ))}
-                            <button type="button" onClick={addPhoneNumber}>Añadir número</button>
-                        </div>
-                        <div className="request_middleRight_inputContainer">
-                            <label className="request_middleRight_label">Sueldo</label>
-                            <input className="request_middleRight_input" type="number" />
-                            {error.sueldo && <p className="request_middleRight_error">{error.sueldo}</p>}
-                        </div>
-                    </div>
-                    <button className="request_middle_button" type="submit">Enviar</button>
-                </form>
-                <div className="request_bottom"></div>
-            </div>
+                                <div className="request_middleRight">
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Apellido Paterno</label>
+                                        <input
+                                            className="request_middleRight_input"
+                                            type="text"
+                                            value={formValues.apellidoPaterno}
+                                            onChange={(event) => setFormValues({ ...formValues, apellidoPaterno: event.target.value })}
+                                        />
+                                        {error.apellidoPaterno && <p className="request_middleRight_error">{error.apellidoPaterno}</p>}
+                                    </div>
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Género</label>
+                                        <select
+                                            className="request_middleRight_input"
+                                            value={formValues.genero}
+                                            onChange={(event) => setFormValues({ ...formValues, genero: event.target.value })}
+                                        >
+                                            <option className="request_middleRight_option" value="masculino">Masculino</option>
+                                            <option className="request_middleRight_option" value="femenino">Femenino</option>
+                                        </select>
+                                        {error.genero && <p className="request_middleRight_error">{error.genero}</p>}
+                                    </div>
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Dirección</label>
+                                        <input
+                                            className="request_middleRight_input"
+                                            type="text"
+                                            value={formValues.direccion}
+                                            onChange={(event) => setFormValues({ ...formValues, direccion: event.target.value })}
+                                        />
+                                        {error.direccion && <p className="request_middleRight_error">{error.direccion}</p>}
+                                    </div>
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Fecha de Nacimiento</label>
+                                        <input
+                                            className="request_middleRight_input"
+                                            type="date"
+                                            value={formValues.fechaNacimiento}
+                                            onChange={(event) => setFormValues({ ...formValues, fechaNacimiento: event.target.value })}
+                                        />
+                                        {error.fechaNacimiento && <p className="request_middleRight_error">{error.fechaNacimiento}</p>}
+                                    </div>
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Números Teléfonicos</label>
+                                        {phoneNumbers.map((phoneNumber, index) => (
+                                            <div key={index} className="request_middleRight_labelPhones">
+                                                <input
+                                                    className="request_middleRight_input"
+                                                    type="number"
+                                                    value={phoneNumber}
+                                                    onChange={(event) => handlePhoneNumberChange(index, event)}
+                                                />
+                                                {error.phoneNumbers && <p className="request_middleRight_error">{error.phoneNumbers}</p>}
+                                            </div>
+                                        ))}
+                                        <button className="request_middle_button" type="button" onClick={addPhoneNumber}>Añadir número</button>
+                                    </div>
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Sueldo</label>
+                                        <input
+                                            className="request_middleRight_input"
+                                            type="number"
+                                            value={formValues.sueldo}
+                                            onChange={(event) => setFormValues({ ...formValues, sueldo: event.target.value })}
+                                        />
+                                        {error.sueldo && <p className="request_middleRight_error">{error.sueldo}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                            <button className="request_middle_button" type="submit">Siguiente</button>
+                        </form>
+                    )}
+                    {step === 2 && (
+                        <form className="request_middle" onSubmit={handleSumbit}>
+                            <div className="request_middleContainer">
+                                <div className="request_middleLeft">
+                                    <div className="request_middleLeft_inputContainer">
+                                        <label className="request_middleLeft_label">Nombre</label>
+                                        <input className="request_middleLeft_input" type="text" />
+                                        {error.nombre && <p className="request_middleLeft_error">{error.nombre}</p>}
+                                    </div>
+                                    <div className="request_middleLeft_inputContainer">
+                                        <label className="request_middleLeft_label">Apellido Materno</label>
+                                        <input className="request_middleLeft_input" type="text" />
+                                        {error.apellidoMaterno && <p className="request_middleLeft_error">{error.apellidoMaterno}</p>}
+                                    </div>
+                                    <div className="request_middleLeft_inputContainer">
+                                        <label className="request_middleLeft_label">Tipo de usuario</label>
+                                        <select className="request_middleLeft_input">
+                                            <option className="request_middleLeft_option" value="cuidador">Cuidador</option>
+                                            <option className="request_middleLeft_option" value="enfermero">Enfermero</option>
+                                        </select>
+                                        {error.tipoUsuario && <p className="request_middleLeft_error">{error.tipoUsuario}</p>}
+                                    </div>
+                                    <div className="request_middleLeft_inputContainer">
+                                        <label className="request_middleLeft_label">Correo Electrónico</label>
+                                        <input className="request_middleLeft_input" type="email" />
+                                        {error.correoElectronico && <p className="request_middleLeft_error">{error.correoElectronico}</p>}
+                                    </div>
+                                    <div className="request_middleLeft_inputContainer">
+                                        <label className="request_middleLeft_label">RFC</label>
+                                        <input className="request_middleLeft_input" type="text" />
+                                        {error.rfc && <p className="request_middleLeft_error">{error.rfc}</p>}
+                                    </div>
+                                </div>
+                                <div className="request_middleRight">
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Apellido Paterno</label>
+                                        <input className="request_middleRight_input" type="text" />
+                                        {error.apellidoPaterno && <p className="request_middleRight_error">{error.apellidoPaterno}</p>}
+                                    </div>
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Género</label>
+                                        <select className="request_middleRight_input">
+                                            <option className="request_middleRight_option" value="masculino">Masculino</option>
+                                            <option className="request_middleRight_option" value="femenino">Femenino</option>
+                                        </select>
+                                        {error.genero && <p className="request_middleRight_error">{error.genero}</p>}
+                                    </div>
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Dirección</label>
+                                        <input className="request_middleRight_input" type="text" />
+                                        {error.direccion && <p className="request_middleRight_error">{error.direccion}</p>}
+                                    </div>
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Fecha de Nacimiento</label>
+                                        <input className="request_middleRight_input" type="date" />
+                                        {error.fechaNacimiento && <p className="request_middleRight_error">{error.fechaNacimiento}</p>}
+                                    </div>
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Números Teléfonicos</label>
+                                        {phoneNumbers.map((phoneNumber, index) => (
+                                            <div key={index} className="request_middleRight_labelPhones">
+                                                <input
+                                                    className="request_middleRight_input"
+                                                    type="number"
+                                                    value={phoneNumber}
+                                                    onChange={(event) => handlePhoneNumberChange(index, event)}
+                                                />
+                                                {error.phoneNumbers && <p className="request_middleRight_error">{error.phoneNumbers}</p>}
+                                            </div>
+                                        ))}
+                                        <button className="request_middle_button" type="button" onClick={addPhoneNumber}>Añadir número</button>
+                                    </div>
+                                    <div className="request_middleRight_inputContainer">
+                                        <label className="request_middleRight_label">Sueldo</label>
+                                        <input className="request_middleRight_input" type="number" />
+                                        {error.sueldo && <p className="request_middleRight_error">{error.sueldo}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                            <button className="request_middle_button" type="submit">enviar</button>
+                        </form>
+                    )}
+                    <div className="request_bottom"></div>
+                </div>
+            </div >
         </>
     )
 }

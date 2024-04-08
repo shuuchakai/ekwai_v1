@@ -200,7 +200,7 @@ export const login = async (req: Request, res: Response) => {
 
         res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
 
-        res.status(200).json({ message: 'Inicio de sesión exitoso' });
+        res.status(200).json({ message: 'Inicio de sesión exitoso', usuario });
     } catch (error) {
         res.status(500).json({ message: 'Error al iniciar sesión' });
     }

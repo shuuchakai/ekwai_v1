@@ -62,7 +62,7 @@ function LoginCard() {
                 contrasena: password
             });
 
-            localStorage.setItem('user', JSON.stringify(response.data));
+            localStorage.setItem('user', JSON.stringify(response.data.usuario));
 
             toast(
                 <div className="loginToast">
