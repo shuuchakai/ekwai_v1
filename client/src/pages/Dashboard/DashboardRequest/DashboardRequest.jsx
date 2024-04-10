@@ -19,99 +19,99 @@ const validationSchema = Yup.object().shape({
     fechaNacimiento: Yup.date().required('La fecha de nacimiento es requerida').nullable(),
     sueldo: Yup.number().required('El sueldo es requerido'),
     phoneNumbers: Yup.array().of(Yup.string().required('El número de teléfono es requerido')),
-    availability: Yup.object().shape({
-        lunes: Yup.object().shape({
-            trabaja: Yup.boolean(),
-            inicio: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de inicio es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-            fin: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de fin es requerida'),
-                otherwise: Yup.string().notRequired()
-            })
-        }),
-        martes: Yup.object().shape({
-            trabaja: Yup.boolean(),
-            inicio: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de inicio es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-            fin: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de fin es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-        }),
-        miercoles: Yup.object().shape({
-            trabaja: Yup.boolean(),
-            inicio: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de inicio es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-            fin: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de fin es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-        }),
-        jueves: Yup.object().shape({
-            trabaja: Yup.boolean(),
-            inicio: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de inicio es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-            fin: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de fin es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-        }),
-        viernes: Yup.object().shape({
-            trabaja: Yup.boolean(),
-            inicio: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de inicio es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-            fin: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de fin es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-        }),
-        sabado: Yup.object().shape({
-            trabaja: Yup.boolean(),
-            inicio: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de inicio es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-            fin: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de fin es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-        }),
-        domingo: Yup.object().shape({
-            trabaja: Yup.boolean(),
-            inicio: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de inicio es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-            fin: Yup.string().when('trabaja', {
-                is: true,
-                then: Yup.string().required('La hora de fin es requerida'),
-                otherwise: Yup.string().notRequired()
-            }),
-        })
-    })
+    // availability: Yup.object().shape({
+    //     lunes: Yup.object().shape({
+    //         trabaja: Yup.boolean(),
+    //         inicio: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de inicio es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //         fin: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de fin es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         })
+    //     }),
+    //     martes: Yup.object().shape({
+    //         trabaja: Yup.boolean(),
+    //         inicio: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de inicio es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //         fin: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de fin es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //     }),
+    //     miercoles: Yup.object().shape({
+    //         trabaja: Yup.boolean(),
+    //         inicio: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de inicio es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //         fin: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de fin es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //     }),
+    //     jueves: Yup.object().shape({
+    //         trabaja: Yup.boolean(),
+    //         inicio: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de inicio es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //         fin: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de fin es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //     }),
+    //     viernes: Yup.object().shape({
+    //         trabaja: Yup.boolean(),
+    //         inicio: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de inicio es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //         fin: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de fin es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //     }),
+    //     sabado: Yup.object().shape({
+    //         trabaja: Yup.boolean(),
+    //         inicio: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de inicio es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //         fin: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de fin es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //     }),
+    //     domingo: Yup.object().shape({
+    //         trabaja: Yup.boolean(),
+    //         inicio: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de inicio es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //         fin: Yup.string().when('trabaja', {
+    //             is: true,
+    //             then: Yup.string().required('La hora de fin es requerida'),
+    //             otherwise: Yup.string().notRequired()
+    //         }),
+    //     })
+    // })
 });
 
 function DashboardRequest() {
@@ -160,8 +160,9 @@ function DashboardRequest() {
 
     const handlePhoneNumberChange = (index, event) => {
         const newPhoneNumbers = [...phoneNumbers];
-        newPhoneNumbers[index] = event.target.value;
+        newPhoneNumbers[index] = event.target.value || ' ';
         setPhoneNumbers(newPhoneNumbers);
+        setFormValues({ ...formValues, phoneNumbers: newPhoneNumbers });
     };
 
     const addPhoneNumber = () => {
@@ -171,25 +172,30 @@ function DashboardRequest() {
     };
 
     const handleSumbit = async (event) => {
-        event.preventDefault();
+    event.preventDefault();
 
-        try {
-            await validationSchema.validate(formValues, { abortEarly: false });
+    try {
+        await validationSchema.validate(formValues, { abortEarly: false });
 
-            setError({});
-            setStep(step + 1); // Incrementa el paso
-        } catch (err) {
-            if (err instanceof Yup.ValidationError) {
-                const errorMessages = {};
+        setError({});
+        console.log('Validation successful, advancing to next step');
+        console.log('Form Values:', formValues); // Agregar esta línea
+        setStep(step + 1);
+    } catch (err) {
+        console.log('Validation error:', err);
+        if (err instanceof Yup.ValidationError) {
+            const errorMessages = {};
 
-                err.inner.forEach((error) => {
-                    errorMessages[error.path] = error.message;
-                });
+            err.inner.forEach((error) => {
+                errorMessages[error.path] = error.message;
+                console.log(`Error on field ${error.path}: ${error.message}`);
+            });
 
-                setError(errorMessages);
-            };
+            setError(errorMessages);
         };
     };
+};
+
     return (
         <>
             <Sidebar />
@@ -241,6 +247,7 @@ function DashboardRequest() {
                                             className="request_middleLeft_input"
                                             type="email"
                                             value={formValues.correoElectronico}
+                                            onChange={((event) => setFormValues({ ...formValues, correoElectronico: event.target.value }))}
                                         />
                                         {error.correoElectronico && <p className="request_middleLeft_error">{error.correoElectronico}</p>}
                                     </div>
@@ -250,6 +257,7 @@ function DashboardRequest() {
                                             className="request_middleLeft_input"
                                             type="text"
                                             value={formValues.rfc}
+                                            onChange={(event) => setFormValues({ ...formValues, rfc: event.target.value })}
                                         />
                                         {error.rfc && <p className="request_middleLeft_error">{error.rfc}</p>}
                                     </div>
@@ -331,17 +339,17 @@ function DashboardRequest() {
                                     <div className="request_middleRight_inputContainer">
                                         <label className="request_middleRight_label">Números Teléfonicos</label>
                                         {phoneNumbers.map((phoneNumber, index) => (
-                                            <div key={index} className="request_middleRight_labelPhones">
+                                            <div key={index}>
+                                                <label>Número de teléfono {index + 1}</label>
                                                 <input
-                                                    className="request_middleRight_input"
-                                                    type="number"
+                                                    type="text"
                                                     value={phoneNumber}
                                                     onChange={(event) => handlePhoneNumberChange(index, event)}
                                                 />
                                                 {error.phoneNumbers && <p className="request_middleRight_error">{error.phoneNumbers}</p>}
                                             </div>
                                         ))}
-                                        <button className="request_middle_button" type="button" onClick={addPhoneNumber}>Añadir número</button>
+                                        <button type="button" onClick={addPhoneNumber}>Añadir número</button>
                                     </div>
                                     <div className="request_middleRight_inputContainer">
                                         <label className="request_middleRight_label">Sueldo</label>
@@ -382,7 +390,7 @@ function DashboardRequest() {
                                     </div>
                                     <div className="request_middleLeft_inputContainer">
                                         <label className="request_middleLeft_label">Correo Electrónico</label>
-                                        <input className="request_middleLeft_input" type="email" />
+                                        <input className="request_middleLeft_input" type="text" />
                                         {error.correoElectronico && <p className="request_middleLeft_error">{error.correoElectronico}</p>}
                                     </div>
                                     <div className="request_middleLeft_inputContainer">
