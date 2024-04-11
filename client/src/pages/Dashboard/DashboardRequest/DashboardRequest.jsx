@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import axios from 'axios';
 import * as Yup from 'yup';
+
+import supabase from '../../../supabaseClient';
 
 import Sidebar from '../../../components/UI/Dashboard/Sidebar/Sidebar';
 
@@ -9,138 +12,44 @@ import './DashboardRequest.css';
 
 const validationSchema = Yup.object().shape({
     nombre: Yup.string().required('El nombre es requerido'),
-    apellidoPaterno: Yup.string().required('El apellido paterno es requerido'),
-    apellidoMaterno: Yup.string().required('El apellido materno es requerido'),
+    apellido_paterno: Yup.string().required('El apellido paterno es requerido'),
+    apellido_materno: Yup.string().required('El apellido materno es requerido'),
     genero: Yup.string().required('El género es requerido'),
-    tipoUsuario: Yup.string().required('El tipo de usuario es requerido'),
-    correoElectronico: Yup.string().email('Correo electrónico inválido').required('El correo electrónico es requerido'),
+    puesto: Yup.string().required('El tipo de usuario es requerido'),
+    correo_electronico: Yup.string().email('Correo electrónico inválido').required('El correo electrónico es requerido'),
     rfc: Yup.string().max(13, 'El RFC no puede tener más de 13 caracteres').required('El RFC es requerido'),
-    direccion: Yup.string().required('La dirección es requerida'),
-    fechaNacimiento: Yup.date().required('La fecha de nacimiento es requerida').nullable(),
-    sueldo: Yup.number().required('El sueldo es requerido'),
+    domicilio: Yup.string().required('La dirección es requerida'),
+    fecha_nacimiento: Yup.date().required('La fecha de nacimiento es requerida').nullable(),
+    salario_hora: Yup.number().required('El salario_hora es requerido'),
     phoneNumbers: Yup.array().of(Yup.string().required('El número de teléfono es requerido')),
-    // availability: Yup.object().shape({
-    //     lunes: Yup.object().shape({
-    //         trabaja: Yup.boolean(),
-    //         inicio: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de inicio es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //         fin: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de fin es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         })
-    //     }),
-    //     martes: Yup.object().shape({
-    //         trabaja: Yup.boolean(),
-    //         inicio: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de inicio es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //         fin: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de fin es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //     }),
-    //     miercoles: Yup.object().shape({
-    //         trabaja: Yup.boolean(),
-    //         inicio: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de inicio es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //         fin: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de fin es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //     }),
-    //     jueves: Yup.object().shape({
-    //         trabaja: Yup.boolean(),
-    //         inicio: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de inicio es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //         fin: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de fin es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //     }),
-    //     viernes: Yup.object().shape({
-    //         trabaja: Yup.boolean(),
-    //         inicio: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de inicio es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //         fin: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de fin es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //     }),
-    //     sabado: Yup.object().shape({
-    //         trabaja: Yup.boolean(),
-    //         inicio: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de inicio es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //         fin: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de fin es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //     }),
-    //     domingo: Yup.object().shape({
-    //         trabaja: Yup.boolean(),
-    //         inicio: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de inicio es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //         fin: Yup.string().when('trabaja', {
-    //             is: true,
-    //             then: Yup.string().required('La hora de fin es requerida'),
-    //             otherwise: Yup.string().notRequired()
-    //         }),
-    //     })
-    // })
+    experiencias_previas: Yup.string(),
+    detalles_ultimo_trabajo: Yup.string()
 });
 
 function DashboardRequest() {
     const [error, setError] = useState({});
     const [phoneNumbers, setPhoneNumbers] = useState(['']);
     const [step, setStep] = useState(1);
+    const [nombreEmpresa, setNombreEmpresa] = useState('');
+    const [razonSalida, setRazonSalida] = useState('');
+    const [nombreJefe, setNombreJefe] = useState('');
+    const [puesto, setPuesto] = useState('');
     const [formValues, setFormValues] = useState({
         nombre: '',
-        apellidoPaterno: '',
-        apellidoMaterno: '',
+        apellido_paterno: '',
+        apellido_materno: '',
         genero: '',
-        tipoUsuario: '',
-        correoElectronico: '',
+        puesto: '',
+        correo_electronico: '',
         rfc: '',
-        direccion: '',
-        fechaNacimiento: '',
-        sueldo: '',
-        phoneNumbers: phoneNumbers,
+        domicilio: '',
+        fecha_nacimiento: '',
+        salario_hora: '',
+        telefonos: phoneNumbers,
+        experiencias_previas: '',
+        detalles_ultimo_trabajo: '',
     });
-    /*const [availability, setAvailability] = useState({
-        lunes: { trabaja: false, inicio: '', fin: '' },
-        martes: { trabaja: false, inicio: '', fin: '' },
-        miercoles: { trabaja: false, inicio: '', fin: '' },
-        jueves: { trabaja: false, inicio: '', fin: '' },
-        viernes: { trabaja: false, inicio: '', fin: '' },
-        sabado: { trabaja: false, inicio: '', fin: '' },
-        domingo: { trabaja: false, inicio: '', fin: '' },
-    });
-    */
+
 
     const user = JSON.parse(localStorage.getItem('user'))
 
@@ -148,21 +57,17 @@ function DashboardRequest() {
         window.location.href = '/login';
     }
 
-    // const handleAvailabilityChange = (day, field, value) => {
-    //     setAvailability({
-    //         ...availability,
-    //         [day]: {
-    //             ...availability[day],
-    //             [field]: value,
-    //         },
-    //     });
-    // };
+    const handleBack = () => {
+        if (step > 1) {
+            setStep(step - 1);
+        }
+    };
 
     const handlePhoneNumberChange = (index, event) => {
         const newPhoneNumbers = [...phoneNumbers];
         newPhoneNumbers[index] = event.target.value || ' ';
         setPhoneNumbers(newPhoneNumbers);
-        setFormValues({ ...formValues, phoneNumbers: newPhoneNumbers });
+        setFormValues({ ...formValues, telefonos: newPhoneNumbers });
     };
 
     const addPhoneNumber = () => {
@@ -171,30 +76,78 @@ function DashboardRequest() {
         }
     };
 
-    const handleSumbit = async (event) => {
-    event.preventDefault();
+    const handleFIleUpload = async (event, fieldName) => {
+        try {
+            const file = event.target.files[0];
+            if (file.size > 1048576) {
+                console.log('El archivo es muy grande.');
+                return;
+            }
 
-    try {
-        await validationSchema.validate(formValues, { abortEarly: false });
+            if (file.type !== 'application/pdf') {
+                console.log('Solo se aceptan pdfs');
+                return;
+            }
 
-        setError({});
-        console.log('Validation successful, advancing to next step');
-        console.log('Form Values:', formValues); // Agregar esta línea
-        setStep(step + 1);
-    } catch (err) {
-        console.log('Validation error:', err);
-        if (err instanceof Yup.ValidationError) {
-            const errorMessages = {};
+            const filePath = `${fieldName}/${file.name}`;
 
-            err.inner.forEach((error) => {
-                errorMessages[error.path] = error.message;
-                console.log(`Error on field ${error.path}: ${error.message}`);
+            let { error: uploadError } = await supabase.storage.from('enfermeritas').upload(filePath, file, {
+                cacheControl: '3600',
+                upsert: false
             });
 
-            setError(errorMessages);
+            if (uploadError) {
+                throw new Error('Error al subir el archivo: ' + uploadError.message);
+            }
+
+            let { data: urlData, error: urlError } = await supabase.storage.from('enfermeritas').createSignedUrl(filePath, 60);
+
+            if (urlError) {
+                throw new Error('Error al obtener la URL del archivo: ' + urlError.message);
+            }
+
+            setFormValues({ ...formValues, [fieldName]: urlData.signedUrl });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    console.log(user.id_usuario);
+
+    const handleSumbit = async (event) => {
+        event.preventDefault();
+
+        const detalles_ultimo_trabajo = `${nombreEmpresa}, ${razonSalida}, ${nombreJefe}, ${puesto}`;
+        const newFormValues = { ...formValues, detalles_ultimo_trabajo };
+
+        try {
+            await validationSchema.validate(newFormValues, { abortEarly: false });
+
+            setError({});
+            console.log('Validation successful, advancing to next step');
+            console.log('Form Values:', newFormValues);
+
+            if (step === 3) {
+                const response = await axios.post('http://localhost:5000/api/solicitud', { ...newFormValues, id_usuario: user.id_usuario });
+
+                console.log('Response Data:', response.data);
+            } else {
+                setStep(step + 1);
+            }
+        } catch (err) {
+            console.log('Validation error:', err, newFormValues);
+            if (err instanceof Yup.ValidationError) {
+                const errorMessages = {};
+
+                err.inner.forEach((error) => {
+                    errorMessages[error.path] = error.message;
+                    console.log(`Error on field ${error.path}: ${error.message}`);
+                });
+
+                setError(errorMessages);
+            };
         };
     };
-};
 
     return (
         <>
@@ -224,32 +177,33 @@ function DashboardRequest() {
                                         <input
                                             className="request_middleLeft_input"
                                             type="text"
-                                            value={formValues.apellidoMaterno}
-                                            onChange={(event) => setFormValues({ ...formValues, apellidoMaterno: event.target.value })}
+                                            value={formValues.apellido_materno}
+                                            onChange={(event) => setFormValues({ ...formValues, apellido_materno: event.target.value })}
                                         />
-                                        {error.apellidoMaterno && <p className="request_middleLeft_error">{error.apellidoMaterno}</p>}
+                                        {error.apellido_materno && <p className="request_middleLeft_error">{error.apellido_materno}</p>}
                                     </div>
                                     <div className="request_middleLeft_inputContainer">
                                         <label className="request_middleLeft_label">Tipo de usuario</label>
                                         <select
                                             className="request_middleLeft_input"
-                                            value={formValues.tipoUsuario}
-                                            onChange={(event) => setFormValues({ ...formValues, tipoUsuario: event.target.value })}
+                                            value={formValues.puesto}
+                                            onChange={(event) => setFormValues({ ...formValues, puesto: event.target.value })}
                                         >
+                                            <option className="request_middleLeft_option" value="">Selecciona una opción</option>
                                             <option className="request_middleLeft_option" value="cuidador">Cuidador</option>
                                             <option className="request_middleLeft_option" value="enfermero">Enfermero</option>
                                         </select>
-                                        {error.tipoUsuario && <p className="request_middleLeft_error">{error.tipoUsuario}</p>}
+                                        {error.puesto && <p className="request_middleLeft_error">{error.puesto}</p>}
                                     </div>
                                     <div className="request_middleLeft_inputContainer">
                                         <label className="request_middleLeft_label">Correo Electrónico</label>
                                         <input
                                             className="request_middleLeft_input"
                                             type="email"
-                                            value={formValues.correoElectronico}
-                                            onChange={((event) => setFormValues({ ...formValues, correoElectronico: event.target.value }))}
+                                            value={formValues.correo_electronico}
+                                            onChange={((event) => setFormValues({ ...formValues, correo_electronico: event.target.value }))}
                                         />
-                                        {error.correoElectronico && <p className="request_middleLeft_error">{error.correoElectronico}</p>}
+                                        {error.correo_electronico && <p className="request_middleLeft_error">{error.correo_electronico}</p>}
                                     </div>
                                     <div className="request_middleLeft_inputContainer">
                                         <label className="request_middleLeft_label">RFC</label>
@@ -261,37 +215,6 @@ function DashboardRequest() {
                                         />
                                         {error.rfc && <p className="request_middleLeft_error">{error.rfc}</p>}
                                     </div>
-                                    {/* Parte de la disponibilidad, agregar cuando ya se tenga la función en el backend. FUNCIÓN EXTRA */}
-                                    {/* <div className="request_middleRight_inputContainer">
-                            <label className="request_middleRight_label">Disponibilidad</label>
-                            {Object.keys(availability).map((day) => (
-                                <div key={day}>
-                                    <label>{day}</label>
-                                    <input
-                                        type="checkbox"
-                                        checked={availability[day].trabaja}
-                                        onChange={(event) => handleAvailabilityChange(day, 'trabaja', event.target.checked)}
-                                    />
-                                    {error[day] && <p className="request_middleLeft_error">{error[day]}</p>}
-                                    {availability[day].trabaja && (
-                                        <>
-                                            <input
-                                                type="time"
-                                                value={availability[day].inicio}
-                                                onChange={(event) => handleAvailabilityChange(day, 'inicio', event.target.value)}
-                                            />
-                                            {error[`${day}.inicio`] && <p className="request_middleLeft_error">{error[`${day}.inicio`]}</p>}
-                                            <input
-                                                type="time"
-                                                value={availability[day].fin}
-                                                onChange={(event) => handleAvailabilityChange(day, 'fin', event.target.value)}
-                                            />
-                                            {error[`${day}.fin`] && <p className="request_middleLeft_error">{error[`${day}.fin`]}</p>}
-                                        </>
-                                    )}
-                                </div>
-                            ))}
-                        </div> */}
                                 </div>
                                 <div className="request_middleRight">
                                     <div className="request_middleRight_inputContainer">
@@ -299,10 +222,10 @@ function DashboardRequest() {
                                         <input
                                             className="request_middleRight_input"
                                             type="text"
-                                            value={formValues.apellidoPaterno}
-                                            onChange={(event) => setFormValues({ ...formValues, apellidoPaterno: event.target.value })}
+                                            value={formValues.apellido_paterno}
+                                            onChange={(event) => setFormValues({ ...formValues, apellido_paterno: event.target.value })}
                                         />
-                                        {error.apellidoPaterno && <p className="request_middleRight_error">{error.apellidoPaterno}</p>}
+                                        {error.apellido_paterno && <p className="request_middleLeft_error">{error.apellido_paterno}</p>}
                                     </div>
                                     <div className="request_middleRight_inputContainer">
                                         <label className="request_middleRight_label">Género</label>
@@ -311,55 +234,57 @@ function DashboardRequest() {
                                             value={formValues.genero}
                                             onChange={(event) => setFormValues({ ...formValues, genero: event.target.value })}
                                         >
+                                            <option className="request_middleRight_option" value="">Selecciona una opción</option>
                                             <option className="request_middleRight_option" value="masculino">Masculino</option>
                                             <option className="request_middleRight_option" value="femenino">Femenino</option>
                                         </select>
-                                        {error.genero && <p className="request_middleRight_error">{error.genero}</p>}
+                                        {error.genero && <p className="request_middleLeft_error">{error.genero}</p>}
                                     </div>
                                     <div className="request_middleRight_inputContainer">
                                         <label className="request_middleRight_label">Dirección</label>
                                         <input
                                             className="request_middleRight_input"
                                             type="text"
-                                            value={formValues.direccion}
-                                            onChange={(event) => setFormValues({ ...formValues, direccion: event.target.value })}
+                                            value={formValues.domicilio}
+                                            onChange={(event) => setFormValues({ ...formValues, domicilio: event.target.value })}
                                         />
-                                        {error.direccion && <p className="request_middleRight_error">{error.direccion}</p>}
+                                        {error.domicilio && <p className="request_middleLeft_error">{error.domicilio}</p>}
                                     </div>
                                     <div className="request_middleRight_inputContainer">
                                         <label className="request_middleRight_label">Fecha de Nacimiento</label>
                                         <input
                                             className="request_middleRight_input"
                                             type="date"
-                                            value={formValues.fechaNacimiento}
-                                            onChange={(event) => setFormValues({ ...formValues, fechaNacimiento: event.target.value })}
+                                            value={formValues.fecha_nacimiento}
+                                            onChange={(event) => setFormValues({ ...formValues, fecha_nacimiento: event.target.value })}
                                         />
-                                        {error.fechaNacimiento && <p className="request_middleRight_error">{error.fechaNacimiento}</p>}
+                                        {error.fecha_nacimiento && <p className="request_middleLeft_error">{error.fecha_nacimiento}</p>}
                                     </div>
                                     <div className="request_middleRight_inputContainer">
                                         <label className="request_middleRight_label">Números Teléfonicos</label>
                                         {phoneNumbers.map((phoneNumber, index) => (
                                             <div key={index}>
-                                                <label>Número de teléfono {index + 1}</label>
+                                                <label className="request_middleRight_label">Número de teléfono {index + 1}</label>
                                                 <input
+                                                    className="request_middleRight_input"
                                                     type="text"
                                                     value={phoneNumber}
                                                     onChange={(event) => handlePhoneNumberChange(index, event)}
                                                 />
-                                                {error.phoneNumbers && <p className="request_middleRight_error">{error.phoneNumbers}</p>}
+                                                {error.phoneNumbers && <p className="request_middleLeft_error">{error.phoneNumbers}</p>}
                                             </div>
                                         ))}
-                                        <button type="button" onClick={addPhoneNumber}>Añadir número</button>
+                                        <button className="request_middle_button" type="button" onClick={addPhoneNumber}>Añadir número</button>
                                     </div>
                                     <div className="request_middleRight_inputContainer">
-                                        <label className="request_middleRight_label">Sueldo</label>
+                                        <label className="request_middleRight_label">Salario por hora</label>
                                         <input
                                             className="request_middleRight_input"
                                             type="number"
-                                            value={formValues.sueldo}
-                                            onChange={(event) => setFormValues({ ...formValues, sueldo: event.target.value })}
+                                            value={formValues.salario_hora}
+                                            onChange={(event) => setFormValues({ ...formValues, salario_hora: event.target.value })}
                                         />
-                                        {error.sueldo && <p className="request_middleRight_error">{error.sueldo}</p>}
+                                        {error.salario_hora && <p className="request_middleLeft_error">{error.salario_hora}</p>}
                                     </div>
                                 </div>
                             </div>
@@ -371,81 +296,138 @@ function DashboardRequest() {
                             <div className="request_middleContainer">
                                 <div className="request_middleLeft">
                                     <div className="request_middleLeft_inputContainer">
-                                        <label className="request_middleLeft_label">Nombre</label>
-                                        <input className="request_middleLeft_input" type="text" />
-                                        {error.nombre && <p className="request_middleLeft_error">{error.nombre}</p>}
+                                        <label className="request_middleLeft_label">Experiencias Previas</label>
+                                        <textarea
+                                            className="request_middleLeft_inputArea"
+                                            value={formValues.experiencias_previas}
+                                            onChange={(event) => setFormValues({ ...formValues, experiencias_previas: event.target.value })}
+                                        />
+                                        {error.experiencias_previas && <p className="request_middleLeft_error">{error.experiencias_previas}</p>}
                                     </div>
-                                    <div className="request_middleLeft_inputContainer">
-                                        <label className="request_middleLeft_label">Apellido Materno</label>
-                                        <input className="request_middleLeft_input" type="text" />
-                                        {error.apellidoMaterno && <p className="request_middleLeft_error">{error.apellidoMaterno}</p>}
-                                    </div>
-                                    <div className="request_middleLeft_inputContainer">
-                                        <label className="request_middleLeft_label">Tipo de usuario</label>
-                                        <select className="request_middleLeft_input">
-                                            <option className="request_middleLeft_option" value="cuidador">Cuidador</option>
-                                            <option className="request_middleLeft_option" value="enfermero">Enfermero</option>
-                                        </select>
-                                        {error.tipoUsuario && <p className="request_middleLeft_error">{error.tipoUsuario}</p>}
-                                    </div>
-                                    <div className="request_middleLeft_inputContainer">
-                                        <label className="request_middleLeft_label">Correo Electrónico</label>
-                                        <input className="request_middleLeft_input" type="text" />
-                                        {error.correoElectronico && <p className="request_middleLeft_error">{error.correoElectronico}</p>}
-                                    </div>
-                                    <div className="request_middleLeft_inputContainer">
-                                        <label className="request_middleLeft_label">RFC</label>
-                                        <input className="request_middleLeft_input" type="text" />
-                                        {error.rfc && <p className="request_middleLeft_error">{error.rfc}</p>}
-                                    </div>
-                                </div>
-                                <div className="request_middleRight">
-                                    <div className="request_middleRight_inputContainer">
-                                        <label className="request_middleRight_label">Apellido Paterno</label>
-                                        <input className="request_middleRight_input" type="text" />
-                                        {error.apellidoPaterno && <p className="request_middleRight_error">{error.apellidoPaterno}</p>}
-                                    </div>
-                                    <div className="request_middleRight_inputContainer">
-                                        <label className="request_middleRight_label">Género</label>
-                                        <select className="request_middleRight_input">
-                                            <option className="request_middleRight_option" value="masculino">Masculino</option>
-                                            <option className="request_middleRight_option" value="femenino">Femenino</option>
-                                        </select>
-                                        {error.genero && <p className="request_middleRight_error">{error.genero}</p>}
-                                    </div>
-                                    <div className="request_middleRight_inputContainer">
-                                        <label className="request_middleRight_label">Dirección</label>
-                                        <input className="request_middleRight_input" type="text" />
-                                        {error.direccion && <p className="request_middleRight_error">{error.direccion}</p>}
-                                    </div>
-                                    <div className="request_middleRight_inputContainer">
-                                        <label className="request_middleRight_label">Fecha de Nacimiento</label>
-                                        <input className="request_middleRight_input" type="date" />
-                                        {error.fechaNacimiento && <p className="request_middleRight_error">{error.fechaNacimiento}</p>}
-                                    </div>
-                                    <div className="request_middleRight_inputContainer">
-                                        <label className="request_middleRight_label">Números Teléfonicos</label>
-                                        {phoneNumbers.map((phoneNumber, index) => (
-                                            <div key={index} className="request_middleRight_labelPhones">
+                                    <div className="request_middleLeft_lastJob">
+                                        <div className="request_middleLeft_lastJob_left">
+                                            <div className="request_middleLeft_inputContainer">
+                                                <label className="request_middleLeft_label">Nombre de la empresa</label>
                                                 <input
-                                                    className="request_middleRight_input"
-                                                    type="number"
-                                                    value={phoneNumber}
-                                                    onChange={(event) => handlePhoneNumberChange(index, event)}
+                                                    className="request_middleLeft_input"
+                                                    type="text"
+                                                    value={nombreEmpresa}
+                                                    onChange={(event) => setNombreEmpresa(event.target.value)}
                                                 />
-                                                {error.phoneNumbers && <p className="request_middleRight_error">{error.phoneNumbers}</p>}
+                                                {error.detalles_ultimo_trabajo && <p className="request_middleLeft_error">{error.detalles_ultimo_trabajo}</p>}
                                             </div>
-                                        ))}
-                                        <button className="request_middle_button" type="button" onClick={addPhoneNumber}>Añadir número</button>
-                                    </div>
-                                    <div className="request_middleRight_inputContainer">
-                                        <label className="request_middleRight_label">Sueldo</label>
-                                        <input className="request_middleRight_input" type="number" />
-                                        {error.sueldo && <p className="request_middleRight_error">{error.sueldo}</p>}
+                                            <div className="request_middleLeft_inputContainer">
+                                                <label className="request_middleLeft_label">¿Por qué ya no trabaja ahí?</label>
+                                                <input
+                                                    className="request_middleLeft_input"
+                                                    type="text"
+                                                    value={razonSalida}
+                                                    onChange={(event) => setRazonSalida(event.target.value)}
+                                                />
+                                                {error.detalles_ultimo_trabajo && <p className="request_middleLeft_error">{error.detalles_ultimo_trabajo}</p>}
+                                            </div>
+                                        </div>
+                                        <div className="request_middleLeft_lastJob_right">
+                                            <div className="request_middleLeft_inputContainer">
+                                                <label className="request_middleLeft_label">Nombre de su anterior jefe</label>
+                                                <input
+                                                    className="request_middleLeft_input"
+                                                    type="text"
+                                                    value={nombreJefe}
+                                                    onChange={(event) => setNombreJefe(event.target.value)}
+                                                />
+                                                {error.detalles_ultimo_trabajo && <p className="request_middleLeft_error">{error.detalles_ultimo_trabajo}</p>}
+                                            </div>
+                                            <div className="request_middleLeft_inputContainer">
+                                                <label className="request_middleLeft_label">Puesto</label>
+                                                <input
+                                                    className="request_middleLeft_input"
+                                                    type="text"
+                                                    value={puesto}
+                                                    onChange={(event) => setPuesto(event.target.value)}
+                                                />
+                                                {error.detalles_ultimo_trabajo && <p className="request_middleLeft_error">{error.detalles_ultimo_trabajo}</p>}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <button className="request_middle_button" type="submit">enviar</button>
+                            <div className="request_middle_buttonContainer">
+                                <button className="request_middle_button" onClick={handleBack}>Regresar</button>
+                                <button className="request_middle_button" type="submit">Siguiente</button>
+                            </div>
+                        </form>
+                    )}
+                    {step === 3 && (
+                        <form onSubmit={handleSumbit} className="request_middle">
+                            <div className="request_middleContainer">
+                                <div className="request_middleLeft">
+                                    <div className="request_middleLeft_files">
+                                        <div className="request_middleLeft_filesLeft">
+                                            <div className="request_middleLeft_inputContainer">
+                                                <label className="request_middleLeft_label">INE</label>
+                                                <input
+                                                    className="request_middleLeft_input"
+                                                    type="file"
+                                                    accept=".pdf"
+                                                    onChange={(event) => handleFIleUpload(event, 'ine')}
+                                                />
+                                            </div>
+                                            <div className="request_middleLeft_inputContainer">
+                                                <label className="request_middleLeft_label">CURP</label>
+                                                <input
+                                                    className="request_middleLeft_input"
+                                                    type="file"
+                                                    accept=".pdf"
+                                                    onChange={(event) => handleFIleUpload(event, 'curp')}
+                                                />
+                                            </div>
+                                            <div className="request_middleLeft_inputContainer">
+                                                <label className="request_middleLeft_label">Título técnico</label>
+                                                <input
+                                                    className="request_middleLeft_input"
+                                                    type="file"
+                                                    accept=".pdf"
+                                                    onChange={(event) => handleFIleUpload(event, 'titulo_tecnico')}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="request_middleLeft_filesRight">
+                                            <div className="request_middleLeft_inputContainer">
+                                                <label className="request_middleLeft_label">Acta de nacimiento</label>
+                                                <input
+                                                    className="request_middleLeft_input"
+                                                    type="file"
+                                                    accept=".pdf"
+                                                    onChange={(event) => handleFIleUpload(event, 'acta_nacimiento')}
+                                                />
+                                            </div>
+                                            <div className="request_middleLeft_inputContainer">
+                                                <label className="request_middleLeft_label">Referencias Personales</label>
+                                                <input
+                                                    className="request_middleLeft_input"
+                                                    type="file"
+                                                    accept=".pdf"
+                                                    onChange={(event) => handleFIleUpload(event, 'referencias_personales')}
+                                                />
+                                            </div>
+                                            <div className="request_middleLeft_inputContainer">
+                                                <label className="request_middleLeft_label">Título profesional</label>
+                                                <input
+                                                    className="request_middleLeft_input"
+                                                    type="file"
+                                                    accept=".pdf"
+                                                    onChange={(event) => handleFIleUpload(event, 'titulo_profesional')}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="request_middle_buttonContainer">
+                                <button className="request_middle_button" onClick={handleBack}>Regresar</button>
+                                <button className="request_middle_button" type="submit">Terminar Solicitud</button>
+                            </div>
                         </form>
                     )}
                     <div className="request_bottom"></div>

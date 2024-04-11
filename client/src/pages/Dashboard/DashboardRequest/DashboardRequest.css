@@ -182,3 +182,72 @@
 .request_middle_button:hover {
     background-color: var(--secondary-color);
 }
+
+.request_middle_buttonContainer {
+    display: flex;
+    gap: 20px;
+}
+
+.request_middleLeft_inputArea {
+    width: 100%;
+    min-height: 100px;
+    max-height: 500px;
+
+    padding: 10px;
+
+    resize: vertical;
+    gap: 2px;
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid var(--inputBorder-color);
+    border-radius: 5px;
+}
+
+.request_middleLeft_inputArea:focus {
+    outline: 1px solid var(--principal-color);
+}
+
+.request_middleLeft_lastJob {
+    width: 100%;
+
+    gap: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.request_middleLeft_lastJob_left {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.request_middleLeft_lastJob_right {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.request_middleLeft_files {
+    width: 100%;
+
+    gap: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.request_middleLeft_filesLeft {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.request_middleLeft_filesRight {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+}

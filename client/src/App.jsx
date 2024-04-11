@@ -7,6 +7,7 @@ import Signup from './pages/Auth/Signup/Signup';
 import VerifyEmail from './pages/Auth/VerifyEmail/VerifyEmail';
 
 import DashboardRequest from './pages/Dashboard/DashboardRequest/DashboardRequest';
+import DashboardSolicitudes from './pages/Dashboard/DashboardRequestGet/DashboardRequestGet';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/verify-email" element={<VerifyEmail />} />
 
         <Route path="/dashboard" element={<DashboardRequest />} />
+        <Route path="/dashboard/solicitudes" element={<DashboardSolicitudes />} />
       </Routes>
     </Router>
   )

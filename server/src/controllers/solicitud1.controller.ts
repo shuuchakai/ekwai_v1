@@ -33,7 +33,7 @@ export const createSolicitudEmpleo = async (req: Request, res: Response) => {
 
     try {
 
-        const { nombre, apellido_paterno, apellido_materno, fecha_nacimiento, correo_electronico, experiencias_previas, detalles_ultimo_trabajo, rfc, domicilio, genero, puesto, salario, ine, acta_nacimiento, curp, referencias_personales, titulo_profesional, titulo_tecnico } = req.body;
+        const { nombre, apellido_paterno, apellido_materno, fecha_nacimiento, correo_electronico, experiencias_previas, detalles_ultimo_trabajo, rfc, domicilio, genero, puesto, salario_hora, ine, acta_nacimiento, curp, referencias_personales, titulo_profesional, titulo_tecnico } = req.body;
 
         const solicitudEmpleo = await SolicitudModel.create({
             id_solicitud,
@@ -41,7 +41,7 @@ export const createSolicitudEmpleo = async (req: Request, res: Response) => {
             domicilio,
             genero,
             puesto,
-            salario_hora: salario,
+            salario_hora,
             apellido_paterno,
             apellido_materno,
             fecha_nacimiento,

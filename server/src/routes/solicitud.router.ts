@@ -8,7 +8,7 @@ const router = Router();
 
 router.post('/solicitud', validateAdmin, createSolicitudEmpleo);
 
-router.get('/solicitud', validateAdmin, getSolicitudesEmpleo);
+router.post('/solicitudGet', validateAdmin, getSolicitudesEmpleo);
 router.get('/solicitud/:id', validateAdmin, getSolicitudEmpleo);
 
 router.put('/solicitud/:id', validateAdmin, updateSolicitudEmpleo);

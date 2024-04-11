@@ -60,7 +60,6 @@ function VerifyEmail() {
                     />
                     <button className="verify_formButton" type="submit">Verificar correo electrónico</button>
                 </form>
-                {/* <p className="verify_text">¿No has recibido el correo electrónico? Haz clic <span className="verify_textLink">aquí</span> para reenviarlo.</p> */}
             </div>
             <Link to="/">
                 <img className="verify_logo" src={Logo} alt="Logo" />
