@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 import * as Yup from 'yup';
@@ -50,6 +51,7 @@ function DashboardRequest() {
         detalles_ultimo_trabajo: '',
     });
 
+    const navigate = useNavigate();
 
     const user = JSON.parse(localStorage.getItem('user'))
 
@@ -89,7 +91,10 @@ function DashboardRequest() {
                 return;
             }
 
-            const filePath = `${fieldName}/${file.name}`;
+            const timestamp = new Date().getTime();
+            const uniqueFileName = `${timestamp}-${file.name}`;
+
+            const filePath = `${fieldName}/${uniqueFileName}`;
 
             let { error: uploadError } = await supabase.storage.from('enfermeritas').upload(filePath, file, {
                 cacheControl: '3600',
@@ -100,13 +105,8 @@ function DashboardRequest() {
                 throw new Error('Error al subir el archivo: ' + uploadError.message);
             }
 
-            let { data: urlData, error: urlError } = await supabase.storage.from('enfermeritas').createSignedUrl(filePath, 60);
-
-            if (urlError) {
-                throw new Error('Error al obtener la URL del archivo: ' + urlError.message);
-            }
-
-            setFormValues({ ...formValues, [fieldName]: urlData.signedUrl });
+            // Guarda la ruta del archivo en lugar de la URL firmada
+            setFormValues({ ...formValues, [fieldName]: filePath });
         } catch (error) {
             console.error(error);
         }
@@ -131,6 +131,7 @@ function DashboardRequest() {
                 const response = await axios.post('http://localhost:5000/api/solicitud', { ...newFormValues, id_usuario: user.id_usuario });
 
                 console.log('Response Data:', response.data);
+                navigate('/dashboard/solicitudes');
             } else {
                 setStep(step + 1);
             }

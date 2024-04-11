@@ -1,33 +1,32 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+
 import supabase from '../../../supabaseClient';
 import Sidebar from '../../../components/UI/Dashboard/Sidebar/Sidebar';
+
 import './DashboardRequestGet.css';
 
-function ArchivoPDF({ idArchivo }) {
+function ArchivoPDF({ rutaArchivo }) {
     const [url, setUrl] = useState(null);
 
     useEffect(() => {
-        const obtenerRutaDesdeDB = async () => {
-            const { data, error } = await supabase
-                .from('enfermeritas')
-                .select('ruta')
-                .eq('id', idArchivo);
+        const obtenerURLArchivo = async () => {
+            const { data, error } = await supabase.storage.from('enfermeritas').createSignedUrl(rutaArchivo, 60);
 
             if (error) {
-                console.error('Error al obtener la ruta del archivo:', error);
+                console.error('Error al obtener la URL del archivo:', error);
             } else {
-                const rutaArchivo = data[0].ruta;
-                const url = await obtenerURLArchivo(rutaArchivo);
-                setUrl(url);
+                setUrl(data.signedUrl);
             }
         };
 
-        obtenerRutaDesdeDB();
-    }, [idArchivo]);
+        obtenerURLArchivo();
+    }, [rutaArchivo]);
 
-    return url ? <iframe src={url} width="100%" height="500px"></iframe> : null;
+    return url ? <iframe src={url} width="300px" height="300px"></iframe> : null;
 }
+
+
 
 function DashboardSolicitudes() {
     const [solicitudes, setSolicitudes] = useState([]);
@@ -43,6 +42,7 @@ function DashboardSolicitudes() {
         const obtenerSolicitudes = async () => {
             try {
                 const response = await axios.post('http://localhost:5000/api/solicitudGet', { id_usuario: user.id_usuario });
+                console.log(response)
                 setSolicitudes(response.data);
             } catch (error) {
                 console.error('Error al obtener las solicitudes de empleo:', error);
@@ -52,7 +52,6 @@ function DashboardSolicitudes() {
                         if (refreshError) {
                             console.error('Error al refrescar la sesión:', refreshError);
                         } else {
-                            // Intenta obtener las solicitudes de nuevo después de refrescar la sesión
                             obtenerSolicitudes();
                         }
                     } catch (error) {
@@ -70,31 +69,47 @@ function DashboardSolicitudes() {
     return (
         <>
             <Sidebar />
-            <div className="solicitudes_container">
-                <h2>Solicitudes de Empleo</h2>
-                <select value={filtroPuesto} onChange={e => setFiltroPuesto(e.target.value)}>
-                    <option value="">Todos</option>
-                    <option value="cuidador">Cuidador</option>
-                    <option value="enfermero">Enfermero</option>
-                </select>
-                {solicitudesFiltradas.map((solicitud, index) => (
-                    <div key={index}>
-                        <h3>{solicitud.nombre}</h3>
-                        <p>{solicitud.puesto}</p>
-                        <p>{solicitud.correo_electronico}</p>
-                        <p>{solicitud.apellido_materno}</p>
-                        <p>{solicitud.apellido_paterno}</p>
-                        <p>{solicitud.domicilio}</p>
-                        <p>{solicitud.genero}</p>
-                        <p>{solicitud.fecha_nacimiento}</p>
-                        <p>{solicitud.rfc}</p>
-                        <p>{solicitud.salario_hora}</p>
-                        <h4>Documentos:</h4>
-                        <ArchivoPDF idArchivo={solicitud.idIne} />
-                        <ArchivoPDF idArchivo={solicitud.idCurp} />
-                        {/* Añade aquí más documentos si los necesitas */}
-                    </div>
-                ))}
+            <div className="solicitudes">
+                <div className="solicitudes_container">
+                    <p className="solicitud_containerTitle">Solicitudes de Empleo</p>
+                    <select value={filtroPuesto} onChange={e => setFiltroPuesto(e.target.value)}>
+                        <option value="">Todos</option>
+                        <option value="cuidador">Cuidador</option>
+                        <option value="enfermero">Enfermero</option>
+                    </select>
+                    {solicitudesFiltradas.map((solicitud, index) => (
+                        <div className="solicitud_containerData" key={index}>
+                            <div className="solicitud_containerData_top">
+                                <div className="solicitud_containerData_left">
+                                    <p>{solicitud.nombre}</p>
+                                    <p>{solicitud.puesto}</p>
+                                    <p>{solicitud.correo_electronico}</p>
+                                    <p>{solicitud.apellido_materno}</p>
+                                    <p>{solicitud.apellido_paterno}</p>
+                                </div>
+                                <div className="solicitud_containerData_right">
+                                    <p>{solicitud.domicilio}</p>
+                                    <p>{solicitud.genero}</p>
+                                    <p>{solicitud.fecha_nacimiento}</p>
+                                    <p>{solicitud.rfc}</p>
+                                    <p>{solicitud.salario_hora}</p>
+                                    {solicitud.telefonos.map((telefono, index) => (
+                                        <p key={index}>{telefono.telefono}</p>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="solicitud_containerData_docs">
+                                <h4>Documentos:</h4>
+                                <ArchivoPDF rutaArchivo={solicitud.ine} />
+                                <ArchivoPDF rutaArchivo={solicitud.acta_nacimiento} />
+                                <ArchivoPDF rutaArchivo={solicitud.referencias_personales} />
+                                <ArchivoPDF rutaArchivo={solicitud.titulo_tecnico} />
+                                <ArchivoPDF rutaArchivo={solicitud.titulo_profesional} />
+                                <ArchivoPDF rutaArchivo={solicitud.curp} />
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </>
     );
