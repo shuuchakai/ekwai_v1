@@ -1,0 +1,253 @@
+.request_container {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.request {
+    width: 100%;
+    max-width: 800px;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    border-radius: 10px;
+    background-color: var(--background-color);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.request_top {
+    margin-bottom: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.request_topLogo {
+    width: 100px;
+    object-fit: contain;
+}
+
+.request_topTitle {
+    padding: 20px;
+
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.request_middle {
+    position: relative;
+
+    margin: 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.request_middleContainer {
+    display: flex;
+    gap: 10px;
+
+    margin-bottom: 20px;
+}
+
+.request_middleLeft {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.request_middleLeft_inputContainer {
+    width: 100%;
+
+    margin-bottom: 10px;
+
+    gap: 2px;
+    display: flex;
+    flex-direction: column;
+}
+
+.request_middleLeft_label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.request_middleLeft_input {
+    width: 100%;
+    height: 40px;
+
+    padding: 0 10px;
+
+    border: 1px solid var(--inputBorder-color);
+    border-radius: 5px;
+}
+
+.request_middleLeft_input:focus {
+    outline: 1px solid var(--principal-color);
+}
+
+.request_middleLeft_error {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(206, 50, 38);
+}
+
+.request_middleRight {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.request_middleRight_inputContainer {
+    width: 100%;
+
+    margin-bottom: 10px;
+
+    gap: 2px;
+    display: flex;
+    flex-direction: column;
+}
+
+.request_middleRight_label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.request_middleRight_input {
+    width: 100%;
+    height: 40px;
+
+    padding: 0 10px;
+
+    border: 1px solid var(--inputBorder-color);
+    border-radius: 5px;
+}
+
+.request_middleRight_input:focus {
+    outline: 1px solid var(--principal-color);
+}
+
+.request_middle_buttonNumber {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: none;
+    border-radius: 5px;
+    background-color: var(--principal-color);
+    color: var(--background-color);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: 300ms ease-in-out;
+}
+
+.request_middle_buttonNumber:hover {
+    background-color: var(--secondary-color);
+}
+
+.request_middle_button {
+    width: 100%;
+    height: 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: none;
+    border-radius: 5px;
+    background-color: var(--principal-color);
+    color: var(--background-color);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: 300ms ease-in-out;
+}
+
+.request_middle_button:hover {
+    background-color: var(--secondary-color);
+}
+
+.request_middle_buttonContainer {
+    display: flex;
+    gap: 20px;
+}
+
+.request_middleLeft_inputArea {
+    width: 100%;
+    min-height: 100px;
+    max-height: 500px;
+
+    padding: 10px;
+
+    resize: vertical;
+    gap: 2px;
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid var(--inputBorder-color);
+    border-radius: 5px;
+}
+
+.request_middleLeft_inputArea:focus {
+    outline: 1px solid var(--principal-color);
+}
+
+.request_middleLeft_lastJob {
+    width: 100%;
+
+    gap: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.request_middleLeft_lastJob_left {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.request_middleLeft_lastJob_right {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.request_middleLeft_files {
+    width: 100%;
+
+    gap: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.request_middleLeft_filesLeft {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.request_middleLeft_filesRight {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+}

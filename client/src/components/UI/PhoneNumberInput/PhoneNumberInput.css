@@ -1,0 +1,49 @@
+.request_mainContent_cardForm_container_inputContainer_phoneContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.request_mainContent_cardForm_container_inputContainer_labelPhone {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.request_mainContent_cardForm_container_inputContainer_inputPhone {
+    width: 100%;
+    height: 30px;
+
+    padding: 0 10px;
+
+    font-size: 14px;
+    border: 1px solid var(--inputBorder-color);
+    border-radius: 5px;
+}
+
+.request_mainContent_cardForm_container_inputContainer_inputPhone:focus {
+    outline: 1px solid var(--principal-color);
+}
+
+.request_mainContent_cardForm_container_inputContainer_button {
+    width: 100%;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--background-color);
+    background-color: var(--principal-color);
+
+    border: none;
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    transition: 300ms ease-in-out;
+}
+
+.request_mainContent_cardForm_container_inputContainer_button:hover {
+    background-color: var(--secondary-color);
+}
